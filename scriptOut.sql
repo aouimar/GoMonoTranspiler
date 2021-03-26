@@ -1,0 +1,17 @@
+\c "user";
+CREATE USER "user" WITH LOGIN ROLE "user";
+GRANT ALL PRIVILEGES ON SCHEMA "user" TO "user";
+CREATE SCHEMA "user";
+CREATE TABLE "user"."BlackList Users" (IdBlackList varchar(20) NOT NULL , Description varchar(200) NULL , CONSTRAINT "Pk_BlackList Users_IdBlackList" PRIMARY KEY (IdBlackList ASC));
+CREATE TABLE "user"."Driver" (IdDriver varchar(20) NOT NULL , FirstName varchar(20) NULL , SecondName varchar(20) NULL , Email varchar(30) NULL , Geolocation geography NULL , CONSTRAINT "Pk_Driver_IdDriver" PRIMARY KEY (IdDriver ASC));
+CREATE TABLE "user"."GPoint" (IdPoint int NOT NULL , PathId int NULL , GeoPoint geography NULL , CONSTRAINT "Pk_Point_IdPoint" PRIMARY KEY (IdPoint ASC));
+CREATE TABLE "user"."Path" (Idpath int NOT NULL , PersonId varchar(20) NULL , NamePath varchar(100) NULL , ComputedTarif money NULL , DriverId varchar(20) NULL , PositionDeparture geography NULL , PositionArrival geography NULL , CONSTRAINT "Pk_Path_Idpath" PRIMARY KEY (Idpath ASC));
+CREATE TABLE "user"."Payment Method" (IdPaymentMethod varchar(20) NOT NULL , Kind varchar(20) NULL , IdPP varchar(20) NULL , CONSTRAINT "Pk_Payment Method_IdPaymentMethod" PRIMARY KEY (IdPaymentMethod ASC));
+CREATE TABLE "user"."Person" (IdPerson varchar(20) NOT NULL , FirstName varchar(20) NULL , SecondName varchar(20) NULL , Email varchar(30) NULL , Adress varchar(50) NULL , Country char(2) NULL , City varchar(20) NULL , Geolocation geography NULL , CONSTRAINT "Pk_Persons_IdPerson" PRIMARY KEY (IdPerson ASC));
+CREATE TABLE "user"."PreEstimatedPoint" (IdPreEstimatedP int NOT NULL , PathId int NULL , GeoPoint geography NULL , CONSTRAINT "Pk_PreEstimatedPoint_IdPreEstimatedP" PRIMARY KEY (IdPreEstimatedP ASC));
+ALTER TABLE "user"."BlackList Users" ADD CONSTRAINT "Fk_BlackList Users_Persons" FOREIGN KEY (IdBlackList) REFERENCES "user"."Person" (IdPerson);
+ALTER TABLE "user"."GPoint" ADD CONSTRAINT "Fk_Point_Path" FOREIGN KEY (PathId) REFERENCES "user"."Path" (Idpath);
+ALTER TABLE "user"."Path" ADD CONSTRAINT "Fk_Path_Driver" FOREIGN KEY (DriverId) REFERENCES "user"."Driver" (IdDriver);
+ALTER TABLE "user"."Path" ADD CONSTRAINT "Fk_Path_Persons" FOREIGN KEY (PersonId) REFERENCES "user"."Person" (IdPerson);
+ALTER TABLE "user"."Payment Method" ADD CONSTRAINT "Fk_Payment Method_Person" FOREIGN KEY (IdPP) REFERENCES "user"."Person" (IdPerson);
+ALTER TABLE "user"."PreEstimatedPoint" ADD CONSTRAINT "Fk_PreEstimatedPoint_Path" FOREIGN KEY (PathId) REFERENCES "user"."Path" (Idpath);
